@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>autoscroll.js</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="jquery-3.1.1.js"></script> -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+        }
+        
+        .imgnotice {
+            width: 100%;
+            max-height: 100vh;
+        }
+        
+        .texture {
+            background-color: #03000d;
+            background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+            color: white;
+            /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+        }
+        
+        .text {
+            /*font-family: 'Roboto Mono', monospace;*/
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .back {
+            background-color: #000000;
+            background-image: url("https://www.transparenttextures.com/patterns/blizzard.png");
+            /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+        }
+        
+        .card-block {
+            padding: 5px;
+        }
+        
+        .AutoScroll {
+            background-color: #191919;
+            color: #fff;
+            position: relative;
+            top: 0px;
+            max-height: 820px;
+            width: 920px;
+            overflow-y: hidden;
+            padding: 0px;
+            border: 1px solid #121212;
+        }
+        
+        .bordered {
+            border: 1px solid black;
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body ng-app="EnoticeBoardWebApp">
+    <div>
+        <div class="row">
+            <div class="col-lg-4 texture"> LATEST NOTICE DETAILS </div>
+            <div class="col-lg-5 texture"> LATEST NOTICE </div>
+            <div class="col-lg-3 texture"> TEXT NOTICE DETAILS <img ng-click="logout()" class="pull-right" style="margin-right:20px;margin-top:2px" src="http://www.clker.com/cliparts/0/K/4/q/M/Y/power-button-off-hi.png" height="18px" width="18px"></div>
+        </div>
+        <div class="row">
+            <div style="overflow: hidden;height : 100%;" class="col-lg-4 bordered">
+                <!--
+                <div class="card">
+                    <div class="card-header"> {{user.time}} </div>
+                    <div class="card-block">
+                        <div ng-if="user.$id == artt.$id">
+                            <p style="color: red;" class="text">Title : {{user.title}}
+                                <br>Description : {{user.Desc}}</p>
+                        </div>
+                        <div ng-if="user.$id != artt.$id">
+                            <p class="text">Title : {{user.title}}
+                                <br>Description : {{user.Desc}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-block"> This is some text within a card block. </div>
+                </div>
+                -->
+                <div ng-repeat="user in articles">
+                    <div ng-if="user.type != 1" class="card">
+                        <div class="card-block" style="height : {{hig}}">
+                            <div ng-if="user.$id == artt.$id"> <span class="pull-right" style="font-size : 10px">{{user.time}}</span>
+                                <p style="color: red;" class="text" style="font-size : 15px">Title : {{user.title}} </p>
+                                <!--<p style="color: red;" class="text">Type : {{user.type}}</p>-->
+                            </div>
+                            <div ng-if="user.$id != artt.$id"><span class="pull-right" style="font-size : 10px">{{user.time}}</span>
+                                <p class="text" style="font-size : 15px">Title : {{user.title}}</p>
+                                <!--<p class="text">Type : {{user.type}}</p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 bordered">
+                <div ng-if="artt.type == 2"> <img class="imgnotice" src="{{artt.images}}"> </div>
+                <div ng-if="artt.type == 1">
+                    <p class="text" style="font-size : 28px; color : #ffb472">Description : {{artt.Desc}}</p>
+                </div>
+                <div ng-if="artt.type == 3">
+                    <!--
+                    <p class="text" style="font-size : 25px; color : #ffb472">Title: {{artt.title}}</p>
+                    <br>
+                    <p class="text" style="font-size : 25px; color : #ffb472">Description : {{artt.Desc}}</p>
+                    -->
+                    <iframe ng-src="{{trustSrc(artt.link)}}" width="100%" style="height : 100vh"></iframe>
+                </div>
+            </div>
+            <div class="col-lg-3 bordered">
+                <div ng-repeat="pd in articles">
+                    <div ng-if="pd.type == 1">
+                        <div class="card">
+                            <div class="card-block">
+                                <div ng-if="pd.$id == artt.$id" style="color: red;">
+                                    <p class="text" style="font-size : 10px">Date : {{pd.time}}</p>
+                                    <p class="text" style="font-size : 15px">Title : {{pd.title}}</p>
+                                </div>
+                                <div ng-if="pd.$id != artt.$id">
+                                    <p class="text" style="font-size : 10px">Date : {{pd.time}}</p>
+                                    <p class="text" style="font-size : 15px">Title : {{pd.title}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div ng-repeat="user1 in testpdf"> 
+                    <iframe src="{{user1.link}}" width="100%" height="800px"></iframe>
+                </div>
+                <iframe src="http://studerende.au.dk/fileadmin/studerende.au.dk/Arts/EVU/IUP-MASTER/Hvordan_samler_man_flere_pdf_i_en_fil.pdf" width="100%" style="height : 100vh"  ></iframe>
+            <!--
+                <div ng-repeat="user1 in articles"> 
+                    <div ng-if="user1.type == 3">
+                        <iframe src="{{user1.link}}" width="100%" height="800px"></iframe>
+                    </div>
+                    <!--<img class="imgnotice" id="img2" src="{{user1.images}}">
+                </div>
+                --></div>
+        </div>
+    </div>
+</body>
+
+</html>
